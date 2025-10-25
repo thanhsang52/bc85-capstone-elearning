@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface CourseImageProps {
   src: string;
   alt: string;
-  className?: string;
 }
 
-const CourseImage = ({ src, alt, className }: CourseImageProps) => {
+const CourseImage = ({ src, alt }: CourseImageProps) => {
   const defaultImage = 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&crop=center';
   const [imgSrc, setImgSrc] = useState(() => {
     // Kiểm tra URL hợp lệ
@@ -36,9 +36,11 @@ const CourseImage = ({ src, alt, className }: CourseImageProps) => {
 
   return (
     <div className="w-full h-full max-h-[300px] overflow-hidden">
-      <img
+      <Image
         src={imgSrc}
         alt={alt}
+        width={400}
+        height={300}
         className="w-full h-full max-h-[300px] object-cover"
         onError={handleError}
       />

@@ -1,8 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Card, Row, Col, Button, Typography, Input, Select, Pagination, Badge, Rate, Spin } from 'antd';
-import { SearchOutlined, PlayCircleOutlined, UserOutlined, ClockCircleOutlined, FilterOutlined } from '@ant-design/icons';
+import { Row, Col, Typography, Input, Select, Pagination, Spin } from 'antd';
+import { SearchOutlined, FilterOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { elearningService, Course } from '../../services/elearningService';
 import CourseCard from '../../components/CourseCard';
@@ -11,7 +11,12 @@ const { Title, Paragraph, Text } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
-export default function CoursesPage() {
+interface Category {
+  maDanhMuc: string;
+  tenDanhMuc: string;
+}
+
+function CoursesPageContent() {
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -20,7 +25,7 @@ export default function CoursesPage() {
 
   // Set initial category from URL params
   useEffect(() => {
-    const categoryParam = searchParams.get('category');
+    const categoryParam = searchParams?.get('category');
     if (categoryParam) {
       setSelectedCategory(categoryParam);
     }
@@ -96,7 +101,7 @@ export default function CoursesPage() {
                   onChange={handleCategoryChange}
                   suffixIcon={<FilterOutlined />}
                 >
-                  {categories?.map((category: any) => (
+                  {categories?.map((category: Category) => (
                     <Option key={category.maDanhMuc} value={category.maDanhMuc}>
                       {category.tenDanhMuc}
                     </Option>
@@ -120,7 +125,7 @@ export default function CoursesPage() {
               </Text>
               {searchTerm && (
                 <Text className="text-blue-600 ml-2">
-                  cho "{searchTerm}"
+                  cho &ldquo;{searchTerm}&rdquo;
                 </Text>
               )}
             </div>
@@ -172,5 +177,13 @@ export default function CoursesPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function CoursesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 flex items-center justify-center"><Spin size="large" /></div>}>
+      <CoursesPageContent />
+    </Suspense>
   );
 }

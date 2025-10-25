@@ -9,6 +9,11 @@ import { useEffect } from 'react';
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
+interface Course {
+  tenKhoaHoc: string;
+  moTa: string;
+}
+
 export default function ProfilePage() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.userSlice);
   const router = useRouter();
@@ -21,7 +26,7 @@ export default function ProfilePage() {
 
   if (!user) return null;
 
-  const enrolledCourses = []; // Placeholder for user courses
+  const enrolledCourses: Course[] = []; // Placeholder for user courses
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -84,7 +89,7 @@ export default function ProfilePage() {
               ) : (
                 <List
                   dataSource={enrolledCourses}
-                  renderItem={(course: any) => (
+                  renderItem={(course: Course) => (
                     <List.Item>
                       <List.Item.Meta
                         title={course.tenKhoaHoc}

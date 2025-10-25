@@ -9,7 +9,7 @@ const { Title, Paragraph } = Typography;
 
 export default function LearningPage() {
   const params = useParams();
-  const courseId = params.id as string;
+  const courseId = params?.id as string;
 
   const { data: course, isLoading } = useQuery({
     queryKey: ['course', courseId],

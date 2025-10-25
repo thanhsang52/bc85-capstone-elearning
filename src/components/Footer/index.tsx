@@ -2,9 +2,10 @@
 import { Layout, Row, Col, Typography, Button } from 'antd';
 import { FacebookOutlined, TwitterOutlined, LinkedinOutlined, YoutubeOutlined, MailOutlined, PhoneOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const { Footer: AntFooter } = Layout;
-const { Title, Paragraph, Text } = Typography;
+const { Title, Text } = Typography;
 
 const Footer = () => {
   return (
@@ -14,9 +15,11 @@ const Footer = () => {
           <Col xs={24} md={6}>
             <div className="mb-6">
               <div className="mb-4">
-                <img 
+                <Image 
                   src="https://elearning.iigvietnam.com/images/logo.png" 
                   alt="Logo" 
+                  width={120}
+                  height={64}
                   className="h-16 w-auto mb-4"
                 />
               </div>

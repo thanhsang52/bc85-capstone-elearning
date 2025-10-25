@@ -1,6 +1,6 @@
 'use client';
 import { Layout, Menu, Avatar, Dropdown, Typography } from 'antd';
-import { DashboardOutlined, BookOutlined, UserOutlined, LogoutOutlined, SettingOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { DashboardOutlined, BookOutlined, UserOutlined, LogoutOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { logout } from '../../store/userSlice';
@@ -86,7 +86,7 @@ export default function AdminLayout({
         <Menu
           theme="dark"
           mode="inline"
-          selectedKeys={[pathname]}
+          selectedKeys={pathname ? [pathname] : []}
           items={menuItems}
           className="border-none"
         />

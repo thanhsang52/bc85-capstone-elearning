@@ -3,8 +3,15 @@ import { useState } from 'react';
 import { Table, Button, Input, Space, Typography, Card, Select, Avatar, Tag } from 'antd';
 import { SearchOutlined, UserOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { elearningService } from '../../../services/elearningService';
+import { elearningService, Course } from '../../../services/elearningService';
 import { message } from 'antd';
+
+interface PendingStudent {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDT: string;
+}
 
 const { Title } = Typography;
 const { Search } = Input;
@@ -68,7 +75,7 @@ export default function PendingStudentsPage() {
     enabled: !!selectedCourse
   });
 
-  const filteredStudents = pendingStudents?.filter((student: any) =>
+  const filteredStudents = pendingStudents?.filter((student: PendingStudent) =>
     student.hoTen.toLowerCase().includes(searchText.toLowerCase()) ||
     student.email.toLowerCase().includes(searchText.toLowerCase()) ||
     student.taiKhoan.toLowerCase().includes(searchText.toLowerCase())
@@ -120,7 +127,7 @@ export default function PendingStudentsPage() {
       title: 'Thao tác',
       key: 'actions',
       width: 150,
-      render: (_, record: any) => (
+      render: (_: unknown, record: PendingStudent) => (
         <Space>
           <Button
             type="primary"
@@ -162,7 +169,7 @@ export default function PendingStudentsPage() {
             allowClear
             onChange={setSelectedCourse}
           >
-            {courses?.map((course: any) => (
+            {courses?.map((course: Course) => (
               <Option key={course.maKhoaHoc} value={course.maKhoaHoc}>
                 {course.tenKhoaHoc}
               </Option>

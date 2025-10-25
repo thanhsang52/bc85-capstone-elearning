@@ -1,13 +1,11 @@
 'use client';
-import { Card, Row, Col, Button, Typography, Input, Badge, Rate } from 'antd';
-import { SearchOutlined, PlayCircleOutlined, UserOutlined, BookOutlined, TrophyOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Typography, Badge } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { elearningService, Course } from '../services/elearningService';
 import CourseCard from '../components/CourseCard';
 import Link from 'next/link';
 
-const { Title, Paragraph, Text } = Typography;
-const { Search } = Input;
+const { Title, Paragraph } = Typography;
 
 export default function HomePage() {
   const { data: courses, isLoading } = useQuery({

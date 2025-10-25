@@ -5,6 +5,32 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, SearchOutline
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { elearningService } from '../../../services/elearningService';
 
+interface User {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDt: string;
+  maLoaiNguoiDung: string;
+}
+
+interface UserCourse {
+  maKhoaHoc: string;
+  tenKhoaHoc: string;
+  danhMucKhoaHoc: {
+    tenDanhMucKhoaHoc: string;
+  };
+}
+
+interface UpdateUserData {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDt: string;
+  maLoaiNguoiDung: string;
+  matKhau?: string;
+  maNhom: string;
+}
+
 const { Title } = Typography;
 const { Search } = Input;
 
@@ -13,9 +39,9 @@ export default function AdminUsersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPendingCoursesModalOpen, setIsPendingCoursesModalOpen] = useState(false);
   const [isApprovedCoursesModalOpen, setIsApprovedCoursesModalOpen] = useState(false);
-  const [editingUser, setEditingUser] = useState<any>(null);
-  const [selectedUser, setSelectedUser] = useState<any>(null);
-  const [selectedUserForApproved, setSelectedUserForApproved] = useState<any>(null);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserForApproved, setSelectedUserForApproved] = useState<User | null>(null);
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
 
@@ -48,7 +74,7 @@ export default function AdminUsersPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: any) => elearningService.updateUser(data),
+    mutationFn: (data: UpdateUserData) => elearningService.updateUser(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       message.success('Cập nhật người dùng thành công!');
@@ -83,13 +109,13 @@ export default function AdminUsersPage() {
     }
   });
 
-  const filteredUsers = users?.filter((user: any) =>
+  const filteredUsers = users?.filter((user: User) =>
     user.hoTen.toLowerCase().includes(searchText.toLowerCase()) ||
     user.email.toLowerCase().includes(searchText.toLowerCase()) ||
     user.taiKhoan.toLowerCase().includes(searchText.toLowerCase())
   ) || [];
 
-  const handleEdit = (user: any) => {
+  const handleEdit = (user: User) => {
     setEditingUser(user);
     form.setFieldsValue(user);
     setIsModalOpen(true);
@@ -107,7 +133,7 @@ export default function AdminUsersPage() {
     form.resetFields();
   };
 
-  const handleViewPendingCourses = (user: any) => {
+  const handleViewPendingCourses = (user: User) => {
     setSelectedUser(user);
     setIsPendingCoursesModalOpen(true);
   };
@@ -117,7 +143,7 @@ export default function AdminUsersPage() {
     setSelectedUser(null);
   };
 
-  const handleViewApprovedCourses = (user: any) => {
+  const handleViewApprovedCourses = (user: User) => {
     setSelectedUserForApproved(user);
     setIsApprovedCoursesModalOpen(true);
   };
@@ -145,7 +171,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: UpdateUserData) => {
     if (editingUser) {
       const updateData = {
         ...values,
@@ -178,7 +204,7 @@ export default function AdminUsersPage() {
       title: 'Avatar',
       key: 'avatar',
       width: 80,
-      render: (_, record: any) => (
+      render: () => (
         <Avatar icon={<UserOutlined />} className="bg-blue-600" />
       ),
     },
@@ -212,7 +238,7 @@ export default function AdminUsersPage() {
       dataIndex: 'maLoaiNguoiDung',
       key: 'maLoaiNguoiDung',
       width: 130,
-      render: (text: string, record: any) => (
+      render: (text: string, record: User) => (
         <Tag color={record.maLoaiNguoiDung === 'GV' ? 'green' : 'blue'}>
           {text}
         </Tag>
@@ -223,7 +249,7 @@ export default function AdminUsersPage() {
       title: 'Thao tác',
       key: 'actions',
       width: 120,
-      render: (_, record: any) => (
+      render: (_: unknown, record: User) => (
         <Space>
           {record.maLoaiNguoiDung === 'HV' && (
             <>
@@ -416,7 +442,7 @@ export default function AdminUsersPage() {
             {
               title: 'Thao tác',
               key: 'actions',
-              render: (_, record: any) => (
+              render: (_: unknown, record: UserCourse) => (
                 <Button
                   type="primary"
                   size="small"
@@ -474,7 +500,7 @@ export default function AdminUsersPage() {
             {
               title: 'Thao tác',
               key: 'actions',
-              render: (_, record: any) => (
+              render: (_: unknown, record: UserCourse) => (
                 <Button
                   danger
                   size="small"

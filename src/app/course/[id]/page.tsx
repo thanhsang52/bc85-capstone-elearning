@@ -1,7 +1,7 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
 import { Card, Button, Typography, Row, Col, Tag, Rate, Divider, Avatar } from 'antd';
-import { PlayCircleOutlined, UserOutlined, ClockCircleOutlined, BookOutlined, StarOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, UserOutlined, ClockCircleOutlined, BookOutlined } from '@ant-design/icons';
 import { useQuery } from '@tanstack/react-query';
 import { elearningService } from '../../../services/elearningService';
 import { useCourseRegistration } from '../../../hook/useCourseRegistration';
@@ -12,7 +12,7 @@ const { Title, Paragraph, Text } = Typography;
 export default function CourseDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const courseId = params.id as string;
+  const courseId = params?.id as string;
   const { handleRegisterCourse, isLoading: registering, isRegistered } = useCourseRegistration(courseId);
 
   const { data: course, isLoading } = useQuery({

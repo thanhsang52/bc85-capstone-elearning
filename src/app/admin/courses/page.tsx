@@ -120,7 +120,7 @@ export default function AdminCoursesPage() {
       title: 'Thao tác',
       key: 'actions',
       width: 150,
-      render: (_, record: Course) => (
+      render: (_: unknown, record: Course) => (
         <Space>
           <Button
             type="text"

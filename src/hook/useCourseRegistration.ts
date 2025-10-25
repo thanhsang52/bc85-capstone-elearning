@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { message } from 'antd';
 import { RootState } from '../store';
 import { elearningService } from '../services/elearningService';

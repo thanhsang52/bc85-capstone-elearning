@@ -65,6 +65,16 @@ export interface User {
   accessToken: string;
 }
 
+export interface UpdateUserRequest {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDt: string;
+  maLoaiNguoiDung: string;
+  matKhau?: string;
+  maNhom: string;
+}
+
 export const elearningService = {
   // Auth APIs
   login: (data: LoginRequest) => api.post<User>('/QuanLyNguoiDung/DangNhap', data),
@@ -99,7 +109,7 @@ export const elearningService = {
   deleteUser: (taiKhoan: string) => 
     api.delete(`/QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${taiKhoan}`),
   
-  updateUser: (data: any) => 
+  updateUser: (data: UpdateUserRequest) => 
     api.put('/QuanLyNguoiDung/CapNhatThongTinNguoiDung', data),
   
   getCourseStudents: (maKhoaHoc: string) => 

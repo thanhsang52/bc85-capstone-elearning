@@ -1,7 +1,6 @@
 
 
-import Cart from '../../components/Cart';
-import OrderList from '../../components/OrderList';
+
 
 const HomePage = () => {
    

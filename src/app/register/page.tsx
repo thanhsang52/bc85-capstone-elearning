@@ -8,6 +8,23 @@ import Link from 'next/link';
 
 const { Title } = Typography;
 
+interface FormValues {
+  taiKhoan: string;
+  hoTen: string;
+  email: string;
+  soDT: string;
+  matKhau: string;
+  confirmPassword: string;
+}
+
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export default function RegisterPage() {
   const router = useRouter();
 
@@ -17,12 +34,12 @@ export default function RegisterPage() {
       message.success('Đăng ký thành công! Vui lòng đăng nhập.');
       router.push('/login');
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       message.error(error.response?.data?.message || 'Đăng ký thất bại!');
     }
   });
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: FormValues) => {
     const registerData: RegisterRequest = {
       ...values,
       maNhom: 'GP01'

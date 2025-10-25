@@ -1,6 +1,6 @@
 'use client';
 import { Layout, Menu, Button, Avatar, Dropdown, Input } from 'antd';
-import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, ShoppingCartOutlined, PhoneOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, PhoneOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { logout, loadUserFromStorage } from '../../store/userSlice';
@@ -8,9 +8,15 @@ import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { elearningService } from '../../services/elearningService';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const { Header: AntHeader } = Layout;
 const { Search } = Input;
+
+interface Category {
+  maDanhMuc: string;
+  tenDanhMuc: string;
+}
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -65,9 +71,11 @@ const Header = () => {
           <div className="flex items-center justify-between py-3">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3">
-              <img 
+              <Image 
                 src="https://elearning.iigvietnam.com/images/logo.png" 
                 alt="Logo" 
+                width={120}
+                height={48}
                 className="h-12 w-auto"
                 style={{ padding: '5px 0' }}
               />
@@ -163,7 +171,7 @@ const Header = () => {
               {
                 key: 'categories',
                 label: <span className="text-gray-700 hover:text-blue-600 px-4 py-3">Danh mục</span>,
-                children: categories?.map((category: any) => ({
+                children: categories?.map((category: Category) => ({
                   key: category.maDanhMuc,
                   label: (
                     <Link 

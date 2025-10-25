@@ -10,6 +10,14 @@ import Link from 'next/link';
 
 const { Title } = Typography;
 
+interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
+
 export default function LoginPage() {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -29,7 +37,7 @@ export default function LoginPage() {
         router.push('/');
       }
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       message.error(error.response?.data?.message || 'Đăng nhập thất bại!');
     }
   });
