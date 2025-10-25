@@ -1,103 +1,111 @@
-import Image from "next/image";
+'use client';
+import { Card, Row, Col, Button, Typography, Input, Badge, Rate } from 'antd';
+import { SearchOutlined, PlayCircleOutlined, UserOutlined, BookOutlined, TrophyOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import { elearningService, Course } from '../services/elearningService';
+import CourseCard from '../components/CourseCard';
+import Link from 'next/link';
 
-export default function Home() {
+const { Title, Paragraph, Text } = Typography;
+const { Search } = Input;
+
+export default function HomePage() {
+  const { data: courses, isLoading } = useQuery({
+    queryKey: ['courses'],
+    queryFn: () => elearningService.getCourseList().then(res => res.data)
+  });
+
+  const featuredCourses = courses?.slice(0, 8) || [];
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen">
+      
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Banner Section */}
+      <section 
+        className="relative h-[30vh] flex items-center justify-center bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1920&h=1080&fit=crop")',
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/80 to-white/70"></div>
+        <div className="relative z-10 text-center text-gray-800 w-full px-4">
+          <div className="max-w-4xl mx-auto bg-white/30 backdrop-blur-sm rounded-2xl p-8">
+            <Title level={1} className="!text-gray-800 !mb-6 text-4xl md:text-5xl lg:text-6xl font-bold" style={{textShadow: '1px 1px 2px rgba(255,255,255,0.8)'}}>
+              🚀 Bắt đầu hành trình học tập!
+            </Title>
+            <Paragraph className="!text-lg md:text-xl lg:text-2xl !text-gray-700 !mb-8 leading-relaxed" style={{textShadow: '1px 1px 1px rgba(255,255,255,0.6)'}}>
+              Tham gia cùng hàng nghìn học viên đã thành công với các khóa học chất lượng cao
+            </Paragraph>
+            <div className="flex flex-row gap-6 justify-center items-center">
+              <Link href="/courses">
+                <Button 
+                  type="primary" 
+                  size="large" 
+                  className="bg-blue-600 text-white border-blue-600 hover:bg-blue-700 font-semibold px-12 py-6 h-auto text-lg shadow-lg"
+                >
+                  Khám phá ngay
+                </Button>
+              </Link>
+              &nbsp;
+              <Button 
+                type="default" 
+                size="large" 
+                className="border-gray-600 text-gray-700 bg-white/50 hover:bg-white hover:text-blue-600 font-semibold px-12 py-6 h-auto text-lg shadow-lg"
+              >
+                Xem demo
+              </Button>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Featured Courses */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <Title level={2} className="text-4xl font-bold text-gray-900 mb-6">
+              🔥 Khóa Học Hot Nhất
+            </Title>
+            <Paragraph className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Những khóa học được yêu thích và đánh giá cao nhất từ cộng đồng học viên
+            </Paragraph>
+          </div>
+          
+          {isLoading ? (
+            <div className="text-center py-20">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-4 text-gray-600">Đang tải khóa học...</p>
+            </div>
+          ) : (
+            <Row gutter={[24, 24]}>
+              {featuredCourses.map((course: Course) => (
+                <Col xs={24} sm={12} lg={8} xl={6} key={course.maKhoaHoc}>
+                  <div className="relative">
+                    <CourseCard course={course} />
+                    <div className="absolute top-3 left-3 z-10">
+                      <Badge count="HOT" style={{ backgroundColor: '#ff4d4f' }} />
+                    </div>
+                  </div>
+                </Col>
+              ))}
+            </Row>
+          )}
+          
+          <div className="text-center mt-16">
+            <Link href="/courses">
+              <Button 
+                type="primary" 
+                size="large" 
+                className="bg-gradient-to-r from-orange-500 to-red-500 border-none px-12 py-6 h-auto text-lg font-semibold"
+              >
+                Xem Tất Cả 1000+ Khóa Học
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
