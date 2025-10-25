@@ -1,6 +1,6 @@
 'use client';
 import { Layout, Menu, Button, Avatar, Dropdown, Input } from 'antd';
-import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, ShoppingCartOutlined, PhoneOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, ShoppingCartOutlined, PhoneOutlined, BookOutlined, SettingOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { logout, loadUserFromStorage } from '../../store/userSlice';
@@ -45,6 +45,7 @@ const Header = () => {
       
       ...(user?.maLoaiNguoiDung === 'GV' ? [{
         key: 'admin',
+        icon: <SettingOutlined />,
         label: <Link href="/admin">Quản trị</Link>,
       }] : []),
       {
@@ -112,7 +113,7 @@ const Header = () => {
                       />
                       <div className="hidden lg:block">
                         <div className="font-medium text-gray-700 text-sm">{user?.hoTen}</div>
-                        <div className="text-xs text-gray-500">Học viên</div>
+                        <div className="text-xs text-gray-500">{user?.maLoaiNguoiDung}</div>
                       </div>
                     </div>
                   </Dropdown>

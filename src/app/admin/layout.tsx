@@ -34,11 +34,11 @@ export default function AdminLayout({
 
   const userMenu = {
     items: [
-      {
-        key: 'settings',
-        icon: <SettingOutlined />,
-        label: 'Cài đặt',
-      },
+      // {
+      //   key: 'settings',
+      //   icon: <SettingOutlined />,
+      //   label: 'Cài đặt',
+      // },
       {
         key: 'logout',
         icon: <LogoutOutlined />,
