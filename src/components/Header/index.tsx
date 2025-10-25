@@ -1,6 +1,6 @@
 'use client';
 import { Layout, Menu, Button, Avatar, Dropdown, Input } from 'antd';
-import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, ShoppingCartOutlined, PhoneOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined, SearchOutlined, BellOutlined, ShoppingCartOutlined, PhoneOutlined, BookOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { logout, loadUserFromStorage } from '../../store/userSlice';
@@ -37,18 +37,16 @@ const Header = () => {
         icon: <UserOutlined />,
         label: <Link href="/profile">Thông tin cá nhân</Link>,
       },
-      {
+      ...(user?.maLoaiNguoiDung === 'HV' ? [{
         key: 'my-courses',
+        icon: <BookOutlined />,
         label: <Link href="/my-courses">Khóa học của tôi</Link>,
-      },
-      {
-        key: 'certificates',
-        label: 'Chứng chỉ',
-      },
-      {
+      }] : []),
+      
+      ...(user?.maLoaiNguoiDung === 'GV' ? [{
         key: 'admin',
         label: <Link href="/admin">Quản trị</Link>,
-      },
+      }] : []),
       {
         key: 'logout',
         icon: <LogoutOutlined />,
