@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Table, Button, Input, Space, Tag, Typography, Card, Modal, Form, Select, message, Avatar } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, SearchOutlined, UserOutlined, TeamOutlined } from '@ant-design/icons';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { elearningService, Course } from '../../../services/elearningService';
 
 const { Title } = Typography;
@@ -16,7 +16,7 @@ export default function AdminCoursesPage() {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [form] = Form.useForm();
-  const queryClient = useQueryClient();
+
 
   const { data: courses, isLoading } = useQuery({
     queryKey: ['courses'],
@@ -70,7 +70,7 @@ export default function AdminCoursesPage() {
     setSelectedCourse(null);
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = () => {
     message.success(editingCourse ? 'Cập nhật khóa học thành công!' : 'Thêm khóa học thành công!');
     handleModalClose();
   };
@@ -185,7 +185,7 @@ export default function AdminCoursesPage() {
             loading={categoriesLoading}
             onChange={setSelectedCategory}
           >
-            {categories?.map((category: any) => (
+            {categories?.map((category: { maDanhMuc: string; tenDanhMuc: string }) => (
               <Select.Option key={category.maDanhMuc} value={category.maDanhMuc}>
                 {category.tenDanhMuc}
               </Select.Option>
@@ -242,7 +242,7 @@ export default function AdminCoursesPage() {
             rules={[{ required: true, message: 'Vui lòng chọn danh mục!' }]}
           >
             <Select placeholder="Chọn danh mục">
-              {categories?.map((cat: any) => (
+              {categories?.map((cat: { maDanhMuc: string; tenDanhMuc: string }) => (
                 <Select.Option key={cat.maDanhMuc} value={cat.maDanhMuc}>
                   {cat.tenDanhMuc}
                 </Select.Option>
