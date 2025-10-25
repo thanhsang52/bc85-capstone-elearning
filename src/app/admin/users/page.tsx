@@ -147,10 +147,17 @@ export default function AdminUsersPage() {
 
   const handleSubmit = (values: any) => {
     if (editingUser) {
-      updateMutation.mutate({
+      const updateData = {
         ...values,
         maNhom: 'GP01'
-      });
+      };
+      
+      // Chỉ gửi mật khẩu nếu có giá trị
+      if (!values.matKhau) {
+        delete updateData.matKhau;
+      }
+      
+      updateMutation.mutate(updateData);
     } else {
       message.info('Tính năng thêm người dùng sẽ được phát triển');
     }
@@ -348,6 +355,14 @@ export default function AdminUsersPage() {
               <Select.Option value="HV">Học viên</Select.Option>
               <Select.Option value="GV">Giáo viên</Select.Option>
             </Select>
+          </Form.Item>
+
+          <Form.Item
+            name="matKhau"
+            label="Mật khẩu mới"
+            rules={[{ min: 6, message: 'Mật khẩu phải có ít nhất 6 ký tự!' }]}
+          >
+            <Input.Password placeholder="Nhập mật khẩu mới (để trống nếu không đổi)" />
           </Form.Item>
 
           <div className="flex justify-end gap-2">
