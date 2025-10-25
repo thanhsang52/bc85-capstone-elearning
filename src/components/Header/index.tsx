@@ -174,10 +174,7 @@ const Header = () => {
                   )
                 })) || []
               },
-              {
-                key: 'instructors',
-                label: <Link href="/instructors" className="text-gray-700 hover:text-blue-600 px-4 py-3">Giảng viên</Link>
-              },
+
               {
                 key: 'about',
                 label: <Link href="/about" className="text-gray-700 hover:text-blue-600 px-4 py-3">Về chúng tôi</Link>
