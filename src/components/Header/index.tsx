@@ -81,18 +81,20 @@ const Header = () => {
               />
             </Link>
 
-            {/* Search */}
-            <div className="max-w-sm mx-4">
-              <Search
-                placeholder="Tìm kiếm..."
-               
-                className="w-full"
-                enterButton={
-                  <Button type="primary" className="bg-blue-600 border-blue-600">
-                    <SearchOutlined />
-                  </Button>
-                }
-              />
+            {/* Platform Info */}
+            <div className="hidden md:flex items-center gap-6 mx-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">1000+</div>
+                <div className="text-xs text-gray-500">Khóa học</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">50K+</div>
+                <div className="text-xs text-gray-500">Học viên</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-semibold text-gray-700">Nền tảng học trực tuyến hàng đầu</div>
+                <div className="text-sm text-blue-600">Chất lượng - Uy tín - Hiệu quả</div>
+              </div>
             </div>
 
             {/* Right Actions */}
