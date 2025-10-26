@@ -31,6 +31,13 @@ interface UpdateUserData {
   maNhom: string;
 }
 
+interface ApiError {
+  response?: {
+    data?: string | { message?: string; error?: string };
+  };
+  message?: string;
+}
+
 const { Title } = Typography;
 const { Search } = Input;
 
@@ -71,7 +78,7 @@ export default function AdminUsersPage() {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       message.success(`Xóa người dùng ${taiKhoan} thành công!`);
     },
-    onError: (error: any, taiKhoan) => {
+    onError: (error: ApiError, taiKhoan) => {
       let errorMessage = `Xóa người dùng ${taiKhoan} thất bại!`;
       
       if (error?.response?.data) {
