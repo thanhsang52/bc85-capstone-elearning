@@ -9,9 +9,7 @@ import React from 'react';
 
 interface ApiError {
   response?: {
-    data?: {
-      message?: string;
-    };
+    data?: string;
   };
 }
 
@@ -58,18 +56,48 @@ export const useCourseRegistration = (maKhoaHoc?: string) => {
         }
       });
     },
-    onError: (error: ApiError) => {
+    onError: (error: ApiError, courseId: string) => {
       console.log('Registration failed:', error);
+      console.log('Course ID in error:', courseId);
+      const errorMessage = error?.response?.data || 'Có lỗi xảy ra khi đăng ký khóa học. Vui lòng thử lại!';
       
-      // Hiển thị message
-      message.error('Đăng ký khóa học thất bại!');
-      
-      // Hiển thị modal
-      modal.error({
-        title: 'Đăng ký thất bại!',
-        content: error?.response?.data?.message || 'Có lỗi xảy ra khi đăng ký khóa học. Vui lòng thử lại!',
-        okText: 'Thử lại'
-      });
+      // Kiểm tra nếu lỗi là đã đăng ký rồi
+      if (errorMessage.includes('Đã đăng ký khóa học này rồi')) {
+        // Cập nhật localStorage để đồng bộ với API
+        if (user?.taiKhoan && courseId) {
+          const registered = getRegisteredCourses();
+          if (!registered.includes(courseId)) {
+            const updated = [...registered, courseId];
+            localStorage.setItem(`registeredCourses_${user.taiKhoan}`, JSON.stringify(updated));
+            console.log('Updated localStorage: course already registered on server');
+          }
+        }
+        
+        // Hiển thị thông báo đã đăng ký
+        message.info('Bạn đã đăng ký khóa học này rồi!');
+        
+        modal.info({
+          title: 'Đã đăng ký!',
+          content: 'Bạn đã đăng ký khóa học này rồi. Hãy bắt đầu học ngay!',
+          okText: 'Bắt đầu học',
+          onOk: () => {
+            const finalCourseId = courseId || maKhoaHoc;
+            console.log('Navigating to learning page with courseId:', finalCourseId);
+            if (finalCourseId) {
+              router.push(`/learning/${finalCourseId}`);
+            }
+          }
+        });
+      } else {
+        // Hiển thị lỗi thông thường
+        message.error('Đăng ký khóa học thất bại!');
+        
+        modal.error({
+          title: 'Đăng ký thất bại!',
+          content: errorMessage,
+          okText: 'Thử lại'
+        });
+      }
     }
   });
 
