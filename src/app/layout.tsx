@@ -4,7 +4,7 @@ import './globals.css';
 import { Provider } from 'react-redux';
 import { store } from '../store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App } from 'antd';
 import viVN from 'antd/locale/vi_VN';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -41,7 +41,9 @@ export default function RootLayout({
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <ConfigProvider locale={viVN}>
-              <LayoutContent>{children}</LayoutContent>
+              <App>
+                <LayoutContent>{children}</LayoutContent>
+              </App>
             </ConfigProvider>
           </QueryClientProvider>
         </Provider>
