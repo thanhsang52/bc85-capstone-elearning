@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Table, Button, Input, Space, Tag, Typography, Card, Modal, Form, Select, message, Avatar } from 'antd';
+import { Table, Button, Input, Space, Tag, Typography, Card, Modal, Form, Select, Avatar, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, UserOutlined, SearchOutlined, ClockCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { elearningService } from '../../../services/elearningService';
@@ -44,6 +44,7 @@ export default function AdminUsersPage() {
   const [selectedUserForApproved, setSelectedUserForApproved] = useState<User | null>(null);
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
+  const { modal, message } = App.useApp();
 
   const { data: users, isLoading } = useQuery({
     queryKey: ['users'],
@@ -63,13 +64,30 @@ export default function AdminUsersPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (taiKhoan: string) => elearningService.deleteUser(taiKhoan),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      message.success('Xóa người dùng thành công!');
+    mutationFn: (taiKhoan: string) => {
+      return elearningService.deleteUser(taiKhoan);
     },
-    onError: () => {
-      message.error('Xóa người dùng thất bại!');
+    onSuccess: (_, taiKhoan) => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      message.success(`Xóa người dùng ${taiKhoan} thành công!`);
+    },
+    onError: (error: any, taiKhoan) => {
+      let errorMessage = `Xóa người dùng ${taiKhoan} thất bại!`;
+      
+      if (error?.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else if (data?.message) {
+          errorMessage = data.message;
+        } else if (data?.error) {
+          errorMessage = data.error;
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      message.error(errorMessage);
     }
   });
 
@@ -189,12 +207,15 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleDelete = (taiKhoan: string) => {
-    Modal.confirm({
-      title: 'Xác nhận xóa',
-      content: 'Bạn có chắc chắn muốn xóa người dùng này?',
+  const handleDelete = (user: User) => {
+    modal.confirm({
+      title: 'Xác nhận xóa người dùng',
+      content: `Bạn có chắc chắn muốn xóa người dùng "${user.hoTen}" (${user.taiKhoan})?`,
+      okText: 'Xóa',
+      cancelText: 'Hủy',
+      okType: 'danger',
       onOk: () => {
-        deleteMutation.mutate(taiKhoan);
+        deleteMutation.mutate(user.taiKhoan);
       }
     });
   };
@@ -276,7 +297,8 @@ export default function AdminUsersPage() {
             type="text"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record.taiKhoan)}
+            onClick={() => handleDelete(record)}
+            loading={deleteMutation.isPending}
           />
         </Space>
       ),

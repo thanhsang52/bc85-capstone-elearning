@@ -1,5 +1,5 @@
 'use client';
-import { Layout, Menu, Avatar, Dropdown, Typography } from 'antd';
+import { Layout, Menu, Avatar, Dropdown, Typography, App } from 'antd';
 import { DashboardOutlined, BookOutlined, UserOutlined, LogoutOutlined, ClockCircleOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
@@ -110,7 +110,9 @@ export default function AdminLayout({
         </Header>
         
         <Content className="p-6 bg-gray-50">
-          {children}
+          <App>
+            {children}
+          </App>
         </Content>
       </Layout>
     </Layout>
