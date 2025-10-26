@@ -35,22 +35,22 @@ const Footer = () => {
           <Col xs={24} md={6}>
             <Title level={5} className="text-gray-900 mb-4">Khóa học</Title>
             <div className="space-y-2">
-              <div><Link href="/courses/programming" className="text-gray-600 hover:text-blue-600">Lập trình</Link></div>
-              <div><Link href="/courses/design" className="text-gray-600 hover:text-blue-600">Thiết kế</Link></div>
-              <div><Link href="/courses/marketing" className="text-gray-600 hover:text-blue-600">Marketing</Link></div>
-              <div><Link href="/courses/business" className="text-gray-600 hover:text-blue-600">Kinh doanh</Link></div>
-              <div><Link href="/courses/language" className="text-gray-600 hover:text-blue-600">Ngoại ngữ</Link></div>
+              <div><Link href="/courses" className="text-gray-600 hover:text-blue-600">Tất cả khóa học</Link></div>
+              <div><Link href="/courses?category=BackEnd" className="text-gray-600 hover:text-blue-600">Lập trình Backend</Link></div>
+              <div><Link href="/courses?category=Design" className="text-gray-600 hover:text-blue-600">Thiết kế Web</Link></div>
+              <div><Link href="/courses?category=DiDong" className="text-gray-600 hover:text-blue-600">Lập trình di động</Link></div>
+              <div><Link href="/courses?category=FrontEnd" className="text-gray-600 hover:text-blue-600">Lập trình Front end</Link></div>
             </div>
           </Col>
           
           <Col xs={24} md={6}>
             <Title level={5} className="text-gray-900 mb-4">Hỗ trợ</Title>
             <div className="space-y-2">
-              <div><Link href="/help" className="text-gray-600 hover:text-blue-600">Trung tâm trợ giúp</Link></div>
-              <div><Link href="/faq" className="text-gray-600 hover:text-blue-600">Câu hỏi thường gặp</Link></div>
-              <div><Link href="/contact" className="text-gray-600 hover:text-blue-600">Liên hệ</Link></div>
-              <div><Link href="/terms" className="text-gray-600 hover:text-blue-600">Điều khoản sử dụng</Link></div>
-              <div><Link href="/privacy" className="text-gray-600 hover:text-blue-600">Chính sách bảo mật</Link></div>
+              <div><Link href="/" className="text-gray-600 hover:text-blue-600">Trang chủ</Link></div>
+              <div><Link href="/courses" className="text-gray-600 hover:text-blue-600">Khóa học</Link></div>
+              <div><Link href="/login" className="text-gray-600 hover:text-blue-600">Đăng nhập</Link></div>
+              <div><Link href="/register" className="text-gray-600 hover:text-blue-600">Đăng ký</Link></div>
+              <div><a href="/about" className="text-gray-600 hover:text-blue-600 cursor-pointer">Về chúng tôi</a></div>
             </div>
           </Col>
           
