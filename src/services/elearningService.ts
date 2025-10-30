@@ -128,5 +128,15 @@ export const elearningService = {
     api.post('/QuanLyNguoiDung/LayDanhSachKhoaHocChoXetDuyet', { taiKhoan }),
   
   getUserApprovedCourses: (taiKhoan: string) => 
-    api.post('/QuanLyNguoiDung/LayDanhSachKhoaHocDaXetDuyet', { taiKhoan })
+    api.post('/QuanLyNguoiDung/LayDanhSachKhoaHocDaXetDuyet', { taiKhoan }),
+  
+  // Course management APIs
+  addCourse: (data: any) => 
+    api.post('/QuanLyKhoaHoc/ThemKhoaHoc', { ...data, maNhom: 'GP01' }),
+  
+  updateCourse: (data: any) => 
+    api.put('/QuanLyKhoaHoc/CapNhatKhoaHoc', { ...data, maNhom: 'GP01' }),
+  
+  deleteCourse: (maKhoaHoc: string) => 
+    api.delete(`/QuanLyKhoaHoc/XoaKhoaHoc?MaKhoaHoc=${maKhoaHoc}`)
 };

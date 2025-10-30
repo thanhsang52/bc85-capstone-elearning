@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
-import { Table, Button, Input, Space, Tag, Typography, Card, Modal, Form, Select, message, Avatar } from 'antd';
+import { Table, Button, Input, Space, Tag, Typography, Card, Modal, Form, Select, Avatar, App } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, SearchOutlined, UserOutlined, TeamOutlined } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { elearningService, Course } from '../../../services/elearningService';
 
 const { Title } = Typography;
@@ -16,6 +16,8 @@ export default function AdminCoursesPage() {
   const [editingCourse, setEditingCourse] = useState<Course | null>(null);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [form] = Form.useForm();
+  const queryClient = useQueryClient();
+  const { message } = App.useApp();
 
 
   const { data: courses, isLoading } = useQuery({
@@ -44,7 +46,12 @@ export default function AdminCoursesPage() {
 
   const handleEdit = (course: Course) => {
     setEditingCourse(course);
-    form.setFieldsValue(course);
+    form.setFieldsValue({
+      tenKhoaHoc: course.tenKhoaHoc,
+      moTa: course.moTa,
+      danhMucKhoaHoc: course.danhMucKhoaHoc.maDanhMucKhoahoc,
+      hinhAnh: course.hinhAnh
+    });
     setIsModalOpen(true);
   };
 
@@ -70,9 +77,53 @@ export default function AdminCoursesPage() {
     setSelectedCourse(null);
   };
 
-  const handleSubmit = () => {
-    message.success(editingCourse ? 'Cập nhật khóa học thành công!' : 'Thêm khóa học thành công!');
-    handleModalClose();
+  const updateMutation = useMutation({
+    mutationFn: (data: any) => {
+      const courseData = {
+        maKhoaHoc: editingCourse?.maKhoaHoc || data.maKhoaHoc,
+        biDanh: data.tenKhoaHoc.toLowerCase().replace(/\s+/g, '-'),
+        tenKhoaHoc: data.tenKhoaHoc,
+        moTa: data.moTa,
+        luotXem: 0,
+        hinhAnh: data.hinhAnh || 'https://via.placeholder.com/300x200',
+        maDanhMucKhoaHoc: data.danhMucKhoaHoc,
+        ngayTao: new Date().toISOString().split('T')[0]
+      };
+      
+      if (editingCourse) {
+        return elearningService.updateCourse(courseData);
+      } else {
+        return elearningService.addCourse(courseData);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      message.success(editingCourse ? 'Cập nhật khóa học thành công!' : 'Thêm khóa học thành công!');
+      handleModalClose();
+    },
+    onError: (error: any) => {
+      console.error('Course update error:', error);
+      let errorMessage = editingCourse ? 'Cập nhật khóa học thất bại!' : 'Thêm khóa học thất bại!';
+      
+      if (error?.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else if (data?.message) {
+          errorMessage = data.message;
+        } else if (data?.error) {
+          errorMessage = data.error;
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      message.error(errorMessage);
+    }
+  });
+
+  const handleSubmit = (values: any) => {
+    updateMutation.mutate(values);
   };
 
   const columns = [
@@ -261,7 +312,12 @@ export default function AdminCoursesPage() {
             <Button onClick={handleModalClose}>
               Hủy
             </Button>
-            <Button type="primary" htmlType="submit" className="bg-blue-600">
+            <Button 
+              type="primary" 
+              htmlType="submit" 
+              className="bg-blue-600"
+              loading={updateMutation.isPending}
+            >
               {editingCourse ? 'Cập nhật' : 'Thêm mới'}
             </Button>
           </div>
