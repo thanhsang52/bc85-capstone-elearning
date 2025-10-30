@@ -8,6 +8,21 @@ import { elearningService, Course } from '../../../services/elearningService';
 const { Title } = Typography;
 const { Search } = Input;
 
+interface ApiError {
+  response?: {
+    data?: string | { message?: string; error?: string };
+  };
+  message?: string;
+}
+
+interface CourseFormData {
+  tenKhoaHoc: string;
+  moTa: string;
+  danhMucKhoaHoc: string;
+  hinhAnh?: string;
+  maKhoaHoc?: string;
+}
+
 export default function AdminCoursesPage() {
   const [searchText, setSearchText] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -85,7 +100,7 @@ export default function AdminCoursesPage() {
       queryClient.invalidateQueries({ queryKey: ['courses'] });
       message.success(`Xóa khóa học ${maKhoaHoc} thành công!`);
     },
-    onError: (error: any, maKhoaHoc) => {
+    onError: (error: ApiError, maKhoaHoc) => {
       let errorMessage = `Xóa khóa học ${maKhoaHoc} thất bại!`;
       
       if (error?.response?.data) {
@@ -106,7 +121,7 @@ export default function AdminCoursesPage() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: (data: any) => {
+    mutationFn: (data: CourseFormData) => {
       const courseData = {
         maKhoaHoc: editingCourse?.maKhoaHoc || data.maKhoaHoc,
         biDanh: data.tenKhoaHoc.toLowerCase().replace(/\s+/g, '-'),
@@ -129,7 +144,7 @@ export default function AdminCoursesPage() {
       message.success(editingCourse ? 'Cập nhật khóa học thành công!' : 'Thêm khóa học thành công!');
       handleModalClose();
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       console.error('Course update error:', error);
       let errorMessage = editingCourse ? 'Cập nhật khóa học thất bại!' : 'Thêm khóa học thất bại!';
       
@@ -150,7 +165,7 @@ export default function AdminCoursesPage() {
     }
   });
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: CourseFormData) => {
     updateMutation.mutate(values);
   };
 

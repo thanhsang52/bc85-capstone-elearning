@@ -75,6 +75,18 @@ export interface UpdateUserRequest {
   maNhom: string;
 }
 
+export interface CourseData {
+  maKhoaHoc?: string;
+  biDanh: string;
+  tenKhoaHoc: string;
+  moTa: string;
+  luotXem: number;
+  hinhAnh: string;
+  maDanhMucKhoaHoc: string;
+  ngayTao: string;
+  maNhom?: string;
+}
+
 export const elearningService = {
   // Auth APIs
   login: (data: LoginRequest) => api.post<User>('/QuanLyNguoiDung/DangNhap', data),
@@ -131,10 +143,10 @@ export const elearningService = {
     api.post('/QuanLyNguoiDung/LayDanhSachKhoaHocDaXetDuyet', { taiKhoan }),
   
   // Course management APIs
-  addCourse: (data: any) => 
+  addCourse: (data: CourseData) => 
     api.post('/QuanLyKhoaHoc/ThemKhoaHoc', { ...data, maNhom: 'GP01' }),
   
-  updateCourse: (data: any) => 
+  updateCourse: (data: CourseData) => 
     api.put('/QuanLyKhoaHoc/CapNhatKhoaHoc', { ...data, maNhom: 'GP01' }),
   
   deleteCourse: (maKhoaHoc: string) => 
