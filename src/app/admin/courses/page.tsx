@@ -17,7 +17,7 @@ export default function AdminCoursesPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
-  const { message } = App.useApp();
+  const { message, modal } = App.useApp();
 
 
   const { data: courses, isLoading } = useQuery({
@@ -77,6 +77,34 @@ export default function AdminCoursesPage() {
     setSelectedCourse(null);
   };
 
+  const deleteMutation = useMutation({
+    mutationFn: (maKhoaHoc: string) => {
+      return elearningService.deleteCourse(maKhoaHoc);
+    },
+    onSuccess: (_, maKhoaHoc) => {
+      queryClient.invalidateQueries({ queryKey: ['courses'] });
+      message.success(`Xóa khóa học ${maKhoaHoc} thành công!`);
+    },
+    onError: (error: any, maKhoaHoc) => {
+      let errorMessage = `Xóa khóa học ${maKhoaHoc} thất bại!`;
+      
+      if (error?.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'string') {
+          errorMessage = data;
+        } else if (data?.message) {
+          errorMessage = data.message;
+        } else if (data?.error) {
+          errorMessage = data.error;
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+      
+      message.error(errorMessage);
+    }
+  });
+
   const updateMutation = useMutation({
     mutationFn: (data: any) => {
       const courseData = {
@@ -124,6 +152,19 @@ export default function AdminCoursesPage() {
 
   const handleSubmit = (values: any) => {
     updateMutation.mutate(values);
+  };
+
+  const handleDelete = (course: Course) => {
+    modal.confirm({
+      title: 'Xác nhận xóa khóa học',
+      content: `Bạn có chắc chắn muốn xóa khóa học "${course.tenKhoaHoc}" (${course.maKhoaHoc})?`,
+      okText: 'Xóa',
+      cancelText: 'Hủy',
+      okType: 'danger',
+      onOk: () => {
+        deleteMutation.mutate(course.maKhoaHoc);
+      }
+    });
   };
 
   const columns = [
@@ -195,7 +236,8 @@ export default function AdminCoursesPage() {
             type="text"
             danger
             icon={<DeleteOutlined />}
-            onClick={() => message.info('Tính năng xóa sẽ được phát triển')}
+            onClick={() => handleDelete(record)}
+            loading={deleteMutation.isPending}
             title="Xóa"
           />
         </Space>
